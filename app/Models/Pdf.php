@@ -1,7 +1,8 @@
 <?php
 namespace ThisApp\Models;
 
-use \Fpdf\fpdf;
+use \Setasign\fpdf\Fpdf;
+use \Setasign\fpdi\Fpdi;
 use \Exception;
 
 class Pdf
@@ -22,7 +23,46 @@ class Pdf
 
 	private function public_hv($datos)
 	{	
-		$datosFinales = array('dp_pape' => isset($datos->dp_pape) ? $datos->dp_pape : "N/A", 
+		/*
+		$datosFinales = $this->getQueryString();
+		$pdf = new Fpdf();
+		$pdf->AddPage();
+		$pdf->SetFont('Arial','B',16);
+		$y = 10;
+		$pdf->Cell(2,$y,'Ejemplo');
+		foreach ($datosFinales as $key => $value) {
+			$pdf->ln();
+			$pdf->write(10, $key.":  ".$value);
+		}
+		$pdf->Output();
+		*/
+		//require_once('fpdf.php');
+		//require_once('fpdi.php');
+		$pdf = new Fpdi();
+
+		$pageCount = $pdf->setSourceFile(__DIR__ .'/../../public/documents/public_hv.pdf');
+		$tplIdx = $pdf->importPage(1, '/MediaBox');
+
+
+		$pdf->addPage();
+		$pdf->useTemplate($tplIdx, 0, 0, 210);
+
+
+/**/
+$pdf->SetFont('Arial','B',16);
+		$y = 10;
+		$pdf->Cell(2,$y,'Ejemplo');
+		$datosFinales = $this->getQueryString();
+		foreach ($datosFinales as $key => $value) {
+			$pdf->ln();
+			$pdf->write(10, $key.":  ".$value);
+		}
+/**/
+		$pdf->Output();
+	}
+
+	private function getQueryString(){
+		return array('dp_pape' => isset($datos->dp_pape) ? $datos->dp_pape : "N/A", 
 				'dp_sape' => isset($datos->dp_sape) ? $datos->dp_sape : "N/A", 
 				'dp_noms' => isset($datos->dp_noms) ? $datos->dp_noms : "N/A", 
 				'dp_tdoc' => isset($datos->dp_tdoc) ? $datos->dp_tdoc : "N/A", 
@@ -159,19 +199,5 @@ class Pdf
 				'tte_mserpubli' => isset($datos->tte_mserpubli) ? $datos->tte_mserpubli : "N/A", 
 				'tte_mprivado' => isset($datos->tte_mprivado) ? $datos->tte_mprivado : "N/A", 
 				'tte_mindep' => isset($datos->tte_mindep) ? $datos->tte_mindep : "N/A");
-
-		$pdf = new fpdf();
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','B',16);
-
-		$y = 10;
-		$pdf->Cell(2,$y,'Ejemplo');
-
-
-		foreach ($datosFinales as $key => $value) {
-			$pdf->ln();
-			$pdf->write(10, $key.":  ".$value);
-		}
-		$pdf->Output();
 	}
 }

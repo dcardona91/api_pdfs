@@ -11,12 +11,13 @@
     "require": {
         "illuminate/http": "^5.3",
         "mailgun/mailgun-php": "^2.1",
-        "setasign/fpdf": "^1.8"
+        "setasign/fpdf": "^1.8",
+        "setasign/fpdi" : "^1.6"
     },
     "autoload": {
         "psr-4":{
             "ThisApp\\": "app/",
-            "Fpdf\\": "vendor/setasign/fpdf"
+            "Setasign\\": "vendor/setasign/"
         }
     }
 }
