@@ -41,23 +41,65 @@ class Pdf
 		$pdf = new Fpdi();
 
 		$pageCount = $pdf->setSourceFile(__DIR__ .'/../../public/documents/public_hv.pdf');
-		$tplIdx = $pdf->importPage(1, '/MediaBox');
+		$templateId = $pdf->importPage(1);
+		$size = $pdf->getTemplateSize($templateId);
+		if ($size['w'] > $size['h']) {
+        	$pdf->AddPage('L', array($size['w'], $size['h']));
+	    } else {
+	        $pdf->AddPage('P', array($size['w'], $size['h']));
+	    }
+	    $pdf->useTemplate($templateId);
 
-
-		$pdf->addPage();
-		$pdf->useTemplate($tplIdx, 0, 0, 210);
-
-
-/**/
-$pdf->SetFont('Arial','B',16);
-		$y = 10;
-		$pdf->Cell(2,$y,'Ejemplo');
+		/*
+		PAGINA 1
+		*/
+		$pdf->SetFont('Arial','B',10);
 		$datosFinales = $this->getQueryString();
 		foreach ($datosFinales as $key => $value) {
-			$pdf->ln();
-			$pdf->write(10, $key.":  ".$value);
+			$ubicacion = explode("_", $key)[0];
+			if ($ubicacion == "fa" or $ubicacion == "dp") {
+				$pdf->ln();
+				$pdf->write(10, $key.":  ".$value);
+				unset($datosFinales[$key]);
+			}					
 		}
-/**/
+		/*
+		PAGINA 2
+		*/
+		$templateId = $pdf->importPage(2);
+		$size = $pdf->getTemplateSize($templateId);
+		if ($size['w'] > $size['h']) {
+        	$pdf->AddPage('L', array($size['w'], $size['h']));
+	    } else {
+	        $pdf->AddPage('P', array($size['w'], $size['h']));
+	    }
+	    $pdf->useTemplate($templateId);
+
+	    foreach ($datosFinales as $key => $value) {
+			$ubicacion = explode("_", $key)[0];
+			if ($ubicacion == "el" ) {
+				$pdf->ln();
+				$pdf->write(10, $key.":  ".$value);
+				unset($datosFinales[$key]);
+			}					
+		}
+
+		/*
+		PAGINA 3
+		*/
+		$templateId = $pdf->importPage(3);
+		$size = $pdf->getTemplateSize($templateId);
+		if ($size['w'] > $size['h']) {
+        	$pdf->AddPage('L', array($size['w'], $size['h']));
+	    } else {
+	        $pdf->AddPage('P', array($size['w'], $size['h']));
+	    }
+	    $pdf->useTemplate($templateId);
+
+	    foreach ($datosFinales as $key => $value) {
+				$pdf->ln();
+				$pdf->write(10, $key.":  ".$value);		
+		}
 		$pdf->Output();
 	}
 
