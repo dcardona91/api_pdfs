@@ -53,8 +53,10 @@ class Pdf
 		/*
 		PAGINA 1
 		*/
-		$pdf->SetFont('Arial','B',10);
+		$pdf->SetFont('Arial','',10);
 		$datosFinales = $this->getQueryString();
+
+		/*
 		foreach ($datosFinales as $key => $value) {
 			$ubicacion = explode("_", $key)[0];
 			if ($ubicacion == "fa" or $ubicacion == "dp") {
@@ -63,6 +65,186 @@ class Pdf
 				unset($datosFinales[$key]);
 			}					
 		}
+		*/
+		$pdf->Text(22, 67, $datosFinales["dp_pape"]);
+		$pdf->Text(80, 67, $datosFinales["dp_sape"]);
+		$pdf->Text(140, 67, $datosFinales["dp_noms"]);
+		switch ($datosFinales["dp_tdoc"]) {
+			case 'pas':
+				$pdf->Text(52, 77, 'X');
+				break;
+			case 'ce':
+				$pdf->Text(40, 77, 'X');
+				break;
+			default:
+				$pdf->Text(29.4, 77, 'X');
+				break;
+		}
+		$pdf->Text(65, 77, $datosFinales["dp_ndoc"]);
+
+		if ($datosFinales["dp_sexo"] == 'f')
+			$pdf->Text(111.8, 77, 'X');
+		else
+			$pdf->Text(120.5, 77, 'X');
+
+		if ($datosFinales["dp_col"]) {
+			$pdf->Text(135.5, 76.8, 'X');
+		}else{
+			$pdf->Text(161, 76.87, 'X');
+			$pdf->Text(167, 76.87, $datosFinales["dp_pais"]);
+		}
+
+		if ($datosFinales["dp_lmpc"])
+			$pdf->Text(51.5, 87.5, 'X');
+		else
+			$pdf->Text(92.3, 87.5, 'X');
+
+		$pdf->Text(118, 87.5, $datosFinales["dp_nlm"]);
+		$pdf->Text(175, 87.5, $datosFinales["dp_dm"]);
+
+		$pdf->Text(49, 100, $datosFinales["dp_dnace"]);
+		$pdf->Text(66.5, 100, $datosFinales["dp_mnace"]);
+		$pdf->Text(84, 100, $datosFinales["dp_anace"]);
+		$pdf->Text(40.5, 107, $datosFinales["dp_pnace"]);
+		$pdf->Text(40.5, 112.8, $datosFinales["dp_dptnace"]);
+		$pdf->Text(40.5, 118.8, $datosFinales["dp_munace"]);
+
+		$pdf->Text(103, 100, $datosFinales["dp_dir"]);
+		$pdf->Text(112, 107, $datosFinales["dp_pais"]);
+		$pdf->Text(166.5, 107, $datosFinales["dp_depto"]);
+		$pdf->Text(121.5, 112.8, $datosFinales["dp_muni"]);
+		$pdf->Text(121.5, 118.6, $datosFinales["dp_tel"]);
+		$pdf->Text(166.5, 118.6, $datosFinales["dp_email"]);
+
+		$pdf->Text(127.5, 156, $datosFinales["fa_titulo"]);
+
+		switch ($datosFinales["fa_nescolar"]) {
+				case '1':
+					$pdf->Text(37, 166.5,'X');	
+					break;
+				case '2':
+					$pdf->Text(43, 166.5,'X');
+					break;
+				case '3':
+					$pdf->Text(49, 166.5,'X');
+					break;
+				case '4':
+					$pdf->Text(55, 166.5,'X');
+					break;
+				case '5':
+					$pdf->Text(61, 166.5,'X');
+					break;
+				case '6':
+					$pdf->Text(67, 166.5,'X');
+					break;
+				case '7':
+					$pdf->Text(73, 166.5,'X');
+					break;
+				case '8':
+					$pdf->Text(79, 166.5,'X');
+					break;
+				case '9':
+					$pdf->Text(85, 166.5,'X');
+					break;
+				case '10':
+					$pdf->Text(91, 166.5,'X');
+					break;				
+				default:
+					$pdf->Text(97, 166.5,'X');
+					break;
+			}	
+
+		$pdf->Text(124.8, 166.5, $datosFinales["fa_mes"]);
+		$pdf->Text(147, 166.5, $datosFinales["fa_ano"]);
+		
+		$pdf->Text(25, 209, $datosFinales["fa_modaca1"]);
+		$pdf->Text(45, 209, $datosFinales["fa_semapro1"]);		
+		if($datosFinales["fa_gradua1"])
+			$pdf->Text(64.5, 209,'X');
+		else
+			$pdf->Text(73.5, 209,'X');
+		$pdf->SetFont('Arial','',8);
+		$pdf->Text(79, 209,$datosFinales["fa_titulo1"]);//MAX 40 CHAR
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(150, 209,$datosFinales["fa_mtermina1"]);
+		$partes = str_split($datosFinales["fa_atermina1"]);
+		$pdf->Text(159, 209,$partes[0]);
+		$pdf->Text(164, 209,$partes[1]);
+		$pdf->Text(168, 209,$partes[2]);
+		$pdf->Text(173, 209,$partes[3]);
+		$pdf->Text(177.5, 209,$datosFinales["fa_notprof1"]);
+
+//FORMACION ACADEMICA 2
+		$pdf->Text(25, 215, $datosFinales["fa_modaca2"]);
+		$pdf->Text(45, 215, $datosFinales["fa_semapro2"]);		
+		if($datosFinales["fa_gradua2"])
+			$pdf->Text(64.5, 215,'X');
+		else
+			$pdf->Text(73.5, 215,'X');
+		$pdf->SetFont('Arial','',8);
+		$pdf->Text(79, 215,$datosFinales["fa_titulo2"]);//MAX 40 CHAR
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(150, 215,$datosFinales["fa_mtermina2"]);
+		$partes = str_split($datosFinales["fa_atermina2"]);
+		$pdf->Text(159, 215,$partes[0]);
+		$pdf->Text(164, 215,$partes[1]);
+		$pdf->Text(168, 215,$partes[2]);
+		$pdf->Text(173, 215,$partes[3]);
+		$pdf->Text(177.5, 215,$datosFinales["fa_notprof2"]);
+
+//FORMACION ACADEMICA 3
+		$pdf->Text(25, 221, $datosFinales["fa_modaca3"]);
+		$pdf->Text(45, 221, $datosFinales["fa_semapro3"]);		
+		if($datosFinales["fa_gradua3"])
+			$pdf->Text(64.5, 221,'X');
+		else
+			$pdf->Text(73.5, 221,'X');
+		$pdf->SetFont('Arial','',8);
+		$pdf->Text(79, 221,$datosFinales["fa_titulo3"]);//MAX 40 CHAR
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(150, 221,$datosFinales["fa_mtermina3"]);
+		$partes = str_split($datosFinales["fa_atermina3"]);
+		$pdf->Text(159, 221,$partes[0]);
+		$pdf->Text(164, 221,$partes[1]);
+		$pdf->Text(168, 221,$partes[2]);
+		$pdf->Text(173, 221,$partes[3]);
+		$pdf->Text(177.5, 221,$datosFinales["fa_notprof3"]);
+
+//FORMACION ACADEMICA 4
+		$pdf->Text(25, 227, $datosFinales["fa_modaca4"]);
+		$pdf->Text(45, 227, $datosFinales["fa_semapro4"]);		
+		if($datosFinales["fa_gradua4"])
+			$pdf->Text(64.5, 227,'X');
+		else
+			$pdf->Text(73.5, 227,'X');
+		$pdf->SetFont('Arial','',8);
+		$pdf->Text(79, 227,$datosFinales["fa_titulo4"]);//MAX 40 CHAR
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(150, 227,$datosFinales["fa_mtermina4"]);
+		$partes = str_split($datosFinales["fa_atermina4"]);
+		$pdf->Text(159, 227,$partes[0]);
+		$pdf->Text(164, 227,$partes[1]);
+		$pdf->Text(168, 227,$partes[2]);
+		$pdf->Text(173, 227,$partes[3]);
+		$pdf->Text(177.5, 227,$datosFinales["fa_notprof4"]);
+
+//FORMACION ACADEMICA 5
+		$pdf->Text(25, 233, $datosFinales["fa_modaca5"]);
+		$pdf->Text(45, 233, $datosFinales["fa_semapro5"]);		
+		if($datosFinales["fa_gradua5"])
+			$pdf->Text(64.5, 233,'X');
+		else
+			$pdf->Text(73.5, 233,'X');
+		$pdf->SetFont('Arial','',8);
+		$pdf->Text(79, 233,$datosFinales["fa_titulo5"]);//MAX 40 CHAR
+		$pdf->SetFont('Arial','',10);
+		$pdf->Text(150, 233,$datosFinales["fa_mtermina5"]);
+		$partes = str_split($datosFinales["fa_atermina5"]);
+		$pdf->Text(159, 233,$partes[0]);
+		$pdf->Text(164, 233,$partes[1]);
+		$pdf->Text(168, 233,$partes[2]);
+		$pdf->Text(173, 233,$partes[3]);
+		$pdf->Text(177.5, 233,$datosFinales["fa_notprof5"]);
 		/*
 		PAGINA 2
 		*/
@@ -136,35 +318,35 @@ class Pdf
 				'fa_gradua1' => isset($datos->fa_gradua1) ? $datos->fa_gradua1 : "N/A", 
 				'fa_titulo1' => isset($datos->fa_titulo1) ? $datos->fa_titulo1 : "N/A", 
 				'fa_mtermina1' => isset($datos->fa_mtermina1) ? $datos->fa_mtermina1 : "N/A", 
-				'fa_atermina1' => isset($datos->fa_atermina1) ? $datos->fa_atermina1 : "N/A", 
+				'fa_atermina1' => isset($datos->fa_atermina1) ? $datos->fa_atermina1 : "1999", 
 				'fa_notprof1' => isset($datos->fa_notprof1) ? $datos->fa_notprof1 : "N/A", 
 				'fa_modaca2' => isset($datos->fa_modaca2) ? $datos->fa_modaca2 : "N/A", 
 				'fa_semapro2' => isset($datos->fa_semapro2) ? $datos->fa_semapro2 : "N/A", 
 				'fa_gradua2' => isset($datos->fa_gradua2) ? $datos->fa_gradua2 : "N/A", 
 				'fa_titulo2' => isset($datos->fa_titulo2) ? $datos->fa_titulo2 : "N/A", 
 				'fa_mtermina2' => isset($datos->fa_mtermina2) ? $datos->fa_mtermina2 : "N/A", 
-				'fa_atermina2' => isset($datos->fa_atermina2) ? $datos->fa_atermina2 : "N/A", 
+				'fa_atermina2' => isset($datos->fa_atermina2) ? $datos->fa_atermina2 : "1999", 
 				'fa_notprof2' => isset($datos->fa_notprof2) ? $datos->fa_notprof2 : "N/A", 
 				'fa_modaca3' => isset($datos->fa_modaca3) ? $datos->fa_modaca3 : "N/A", 
 				'fa_semapro3' => isset($datos->fa_semapro3) ? $datos->fa_semapro3 : "N/A", 
 				'fa_gradua3' => isset($datos->fa_gradua3) ? $datos->fa_gradua3 : "N/A", 
 				'fa_titulo3' => isset($datos->fa_titulo3) ? $datos->fa_titulo3 : "N/A", 
 				'fa_mtermina3' => isset($datos->fa_mtermina3) ? $datos->fa_mtermina3 : "N/A", 
-				'fa_atermina3' => isset($datos->fa_atermina3) ? $datos->fa_atermina3 : "N/A", 
+				'fa_atermina3' => isset($datos->fa_atermina3) ? $datos->fa_atermina3 : "1999", 
 				'fa_notprof3' => isset($datos->fa_notprof3) ? $datos->fa_notprof3 : "N/A", 
 				'fa_modaca4' => isset($datos->fa_modaca4) ? $datos->fa_modaca4 : "N/A", 
 				'fa_semapro4' => isset($datos->fa_semapro4) ? $datos->fa_semapro4 : "N/A", 
 				'fa_gradua4' => isset($datos->fa_gradua4) ? $datos->fa_gradua4 : "N/A", 
 				'fa_titulo4' => isset($datos->fa_titulo4) ? $datos->fa_titulo4 : "N/A", 
 				'fa_mtermina4' => isset($datos->fa_mtermina4) ? $datos->fa_mtermina4 : "N/A", 
-				'fa_atermina4' => isset($datos->fa_atermina4) ? $datos->fa_atermina4 : "N/A", 
+				'fa_atermina4' => isset($datos->fa_atermina4) ? $datos->fa_atermina4 : "1999", 
 				'fa_notprof4' => isset($datos->fa_notprof4) ? $datos->fa_notprof4 : "N/A", 
 				'fa_modaca5' => isset($datos->fa_modaca5) ? $datos->fa_modaca5 : "N/A", 
 				'fa_semapro5' => isset($datos->fa_semapro5) ? $datos->fa_semapro5 : "N/A", 
 				'fa_gradua5' => isset($datos->fa_gradua5) ? $datos->fa_gradua5 : "N/A", 
 				'fa_titulo5' => isset($datos->fa_titulo5) ? $datos->fa_titulo5 : "N/A", 
 				'fa_mtermina5' => isset($datos->fa_mtermina5) ? $datos->fa_mtermina5 : "N/A", 
-				'fa_atermina5' => isset($datos->fa_atermina5) ? $datos->fa_atermina5 : "N/A", 
+				'fa_atermina5' => isset($datos->fa_atermina5) ? $datos->fa_atermina5 : "1999", 
 				'fa_notprof5' => isset($datos->fa_notprof5) ? $datos->fa_notprof5 : "N/A", 
 				'fa_idioma1' => isset($datos->fa_idioma1) ? $datos->fa_idioma1 : "N/A", 
 				'fa_habla1' => isset($datos->fa_habla1) ? $datos->fa_habla1 : "N/A", 
