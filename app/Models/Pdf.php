@@ -245,6 +245,89 @@ class Pdf
 		$pdf->Text(168, 233,$partes[2]);
 		$pdf->Text(173, 233,$partes[3]);
 		$pdf->Text(177.5, 233,$datosFinales["fa_notprof5"]);
+		
+		$pdf->Text(55, 254.5,$datosFinales["fa_idioma1"]);		
+		
+		switch ($datosFinales["fa_habla1"]) {
+			case "R":
+				$pdf->Text(107, 254.5,"X");
+				break;
+			case "B":
+				$pdf->Text(113, 254.5,"X");
+				break;			
+			default:
+				$pdf->Text(119, 254.5,"X");
+				break;
+		}
+
+		switch ($datosFinales["fa_lee1"]) {
+			case "R":
+				$pdf->Text(125, 254.5,"X");
+				break;
+			case "B":
+				$pdf->Text(131, 254.5,"X");
+				break;			
+			default:
+				$pdf->Text(137, 254.5,"X");
+				break;
+		}
+
+		switch ($datosFinales["fa_escribe1"]) {
+			case "R":
+				$pdf->Text(143, 254.5,"X");
+				break;
+			case "B":
+				$pdf->Text(149, 254.5,"X");
+				break;			
+			default:
+				$pdf->Text(155, 254.5,"X");
+				break;
+		}
+
+		$pdf->Text(55, 260,$datosFinales["fa_idioma2"]);
+
+		switch ($datosFinales["fa_habla2"]) {
+			case "R":
+				$pdf->Text(107, 260,"X");
+				break;
+			case "B":
+				$pdf->Text(113, 260,"X");
+				break;			
+			default:
+				$pdf->Text(119, 260,"X");
+				break;
+		}
+
+		switch ($datosFinales["fa_lee2"]) {
+			case "R":
+				$pdf->Text(125, 260,"X");
+				break;
+			case "B":
+				$pdf->Text(131, 260,"X");
+				break;			
+			default:
+				$pdf->Text(137, 260,"X");
+				break;
+		}
+
+		switch ($datosFinales["fa_escribe2"]) {
+			case "R":
+				$pdf->Text(143, 260,"X");
+				break;
+			case "B":
+				$pdf->Text(149, 260,"X");
+				break;			
+			default:
+				$pdf->Text(155, 260,"X");
+				break;
+		}
+// 
+// 
+// 
+// fa_idioma2
+// fa_habla2
+// fa_lee2
+// fa_escribe2
 		/*
 		PAGINA 2
 		*/
