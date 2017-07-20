@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>test</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+</head>
+<body>
+<script>
+$(document).ready(function(){
+
+  $.ajax({
+    url: 'http://192.168.33.10/document/public_hv', // point to server-side PHP script 
+    dataType: 'json',  // what to expect back from the PHP script, if anything
+    cache: false,
+    contentType: false,
+    processData: false,
+    data: '',
+    type: 'get',
+    success: function(data){
+        	console.log(data);
+    	}
+ 	});
+  })
+</script>
+</body>
+</html>

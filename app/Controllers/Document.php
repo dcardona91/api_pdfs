@@ -27,7 +27,7 @@ class Document{
 				}else{
 					$r->setStatus(200);
 					$r->setMsg("Documento generado correctamente");
-					$r->setResponse(array("document" => "http://192.168.33.10/documents/".$rpta));
+					$r->setResponse(array("document" => $rpta));
 					$r->output("GET");
 				}
 			}else{				

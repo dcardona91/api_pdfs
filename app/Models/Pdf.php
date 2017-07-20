@@ -4,12 +4,13 @@ namespace ThisApp\Models;
 use \Setasign\fpdf\Fpdf;
 use \Setasign\fpdi\Fpdi;
 use ThisApp\Aplication\Security\Hash;
+use ThisApp\Aplication\System\Config;
 use \Exception;
 
 class Pdf
 {
 
-	public function generate($pdf, $datos )
+	public function generate($pdf, $datos)
 	{ 
 		try {
 			if (!method_exists($this, $pdf)) {
@@ -18,10 +19,15 @@ class Pdf
 				$fpdi = new Fpdi();
 				$this->$pdf($fpdi, $datos);
 				$nombre = 'hv_publica_'.uniqid().'.pdf';
-				if($fpdi->Output("F",__DIR__ .'/../../public/documents/'.$nombre,true) != ""){
+				$userFolder = isset($datos->user) ? $datos->user : "000";
+				$ruta = __DIR__ .'/../../public/documents/'. $userFolder ;
+				if(!file_exists($ruta)){
+					mkdir($ruta);
+				}
+				if($fpdi->Output("F",$ruta.'/'.$nombre,true) != ""){
 					return -1;
 				};
-				return $nombre;
+				return Config::get("site/name")."/documents/".$userFolder."/".$nombre;
 			}
 		} catch (Exception $e) {
 			return $e;
@@ -32,7 +38,7 @@ class Pdf
 	{		
 		$pageCount = $pdf->setSourceFile(__DIR__ .'/../../public/documents/public_hv.pdf');
 		$pdf->SetFont('Arial','',10);
-		$datosFinales = $this->getQueryString();
+		$datosFinales = $this->getQueryString($datos);
 		$this->getFirstPage($pdf, $datosFinales);
 		$this->getSecondPage($pdf, $datosFinales);
 		$this->getSecondPage($pdf, $datosFinales);		
@@ -489,7 +495,7 @@ private function getThirdPage($pdf, $datosFinales ){
 
 }
 
-	private function getQueryString(){
+	private function getQueryString($datos){
 		return array('dp_pape' => isset($datos->dp_pape) ? $datos->dp_pape : "N/A", 
 				'dp_sape' => isset($datos->dp_sape) ? $datos->dp_sape : "N/A", 
 				'dp_noms' => isset($datos->dp_noms) ? $datos->dp_noms : "N/A", 

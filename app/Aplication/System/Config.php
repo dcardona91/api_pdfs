@@ -15,6 +15,10 @@ class Config{
 			'mailgun' => array(
 				'api_key' => 'key-fa909a205b5b37610cdcc408ad8ad64b',
 				'domain' => 'supere.cieroccidente.edu.co'
+				),
+			'site' => array(
+				'name' => 'itm.andres.fm',
+				'ip' => ''
 				)
 			);
 
