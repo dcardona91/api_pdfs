@@ -3,6 +3,7 @@ namespace ThisApp\Models;
 
 use \Setasign\fpdf\Fpdf;
 use \Setasign\fpdi\Fpdi;
+use ThisApp\Aplication\Security\Hash;
 use \Exception;
 
 class Pdf
@@ -12,35 +13,32 @@ class Pdf
 	{ 
 		try {
 			if (!method_exists($this, $pdf)) {
-				throw new Exception("El documento no existe");				
+				return -1;				
 			}else{
-				call_user_func($this->$pdf($datos));
+				$fpdi = new Fpdi();
+				$this->$pdf($fpdi, $datos);
+				$nombre = 'hv_publica_'.uniqid().'.pdf';
+				if($fpdi->Output("F",__DIR__ .'/../../public/documents/'.$nombre,true) != ""){
+					return -1;
+				};
+				return $nombre;
 			}
 		} catch (Exception $e) {
-			die($e->getMessage());
+			return $e;
 		}		
 	}
 
-	private function public_hv($datos)
-	{	
-		/*
-		$datosFinales = $this->getQueryString();
-		$pdf = new Fpdf();
-		$pdf->AddPage();
-		$pdf->SetFont('Arial','B',16);
-		$y = 10;
-		$pdf->Cell(2,$y,'Ejemplo');
-		foreach ($datosFinales as $key => $value) {
-			$pdf->ln();
-			$pdf->write(10, $key.":  ".$value);
-		}
-		$pdf->Output();
-		*/
-		//require_once('fpdf.php');
-		//require_once('fpdi.php');
-		$pdf = new Fpdi();
-
+	private function public_hv($pdf, $datos)
+	{		
 		$pageCount = $pdf->setSourceFile(__DIR__ .'/../../public/documents/public_hv.pdf');
+		$pdf->SetFont('Arial','',10);
+		$datosFinales = $this->getQueryString();
+		$this->getFirstPage($pdf, $datosFinales);
+		$this->getSecondPage($pdf, $datosFinales);
+		$this->getSecondPage($pdf, $datosFinales);		
+	}
+
+	private function getFirstPage($pdf, $datosFinales ){
 		$templateId = $pdf->importPage(1);
 		$size = $pdf->getTemplateSize($templateId);
 		if ($size['w'] > $size['h']) {
@@ -52,19 +50,6 @@ class Pdf
 
 		/*
 		PAGINA 1
-		*/
-		$pdf->SetFont('Arial','',10);
-		$datosFinales = $this->getQueryString();
-
-		/*
-		foreach ($datosFinales as $key => $value) {
-			$ubicacion = explode("_", $key)[0];
-			if ($ubicacion == "fa" or $ubicacion == "dp") {
-				$pdf->ln();
-				$pdf->write(10, $key.":  ".$value);
-				unset($datosFinales[$key]);
-			}					
-		}
 		*/
 		$pdf->Text(22, 67, $datosFinales["dp_pape"]);
 		$pdf->Text(80, 67, $datosFinales["dp_sape"]);
@@ -321,13 +306,10 @@ class Pdf
 				$pdf->Text(155, 260,"X");
 				break;
 		}
-// 
-// 
-// 
-// fa_idioma2
-// fa_habla2
-// fa_lee2
-// fa_escribe2
+	}
+
+	private function getSecondPage($pdf, $datosFinales ){
+
 		/*
 		PAGINA 2
 		*/
@@ -340,14 +322,120 @@ class Pdf
 	    }
 	    $pdf->useTemplate($templateId);
 
-	    foreach ($datosFinales as $key => $value) {
-			$ubicacion = explode("_", $key)[0];
-			if ($ubicacion == "el" ) {
-				$pdf->ln();
-				$pdf->write(10, $key.":  ".$value);
-				unset($datosFinales[$key]);
-			}					
-		}
+
+
+/*
+*************************INICIO EXPERIENCIA 1 O ACTUAL 
+*/
+		//1ra linea
+	    $pdf->Text(22, 85, $datosFinales["el_empresa1"]);
+		if ($datosFinales["el_publica1"]) $pdf->Text(119, 85, 'X'); else $pdf->Text(138, 85, 'X');
+		$pdf->Text(152, 85.5, $datosFinales["el_pais1"]);
+
+		//2da linea
+		$pdf->Text(22, 95, $datosFinales["el_depto1"]);
+		$pdf->Text(85, 95, $datosFinales["el_muni1"]);
+		$pdf->Text(147, 95.5, $datosFinales["el_correo1"]);
+
+		//3ra linea
+		$pdf->Text(22,105.5, $datosFinales["el_tel1"]);
+		$pdf->Text(93,105.5, $datosFinales["el_dingresa1"]);
+		$pdf->Text(110,105.5, $datosFinales["el_mingresa1"]);
+		$pdf->Text(128,105.5, $datosFinales["el_aingresa1"]);
+		$pdf->Text(151,105.5, $datosFinales["el_dretiro1"]);
+		$pdf->Text(169,105.5, $datosFinales["el_mretiro1"]);
+		$pdf->Text(187,105.5, $datosFinales["el_aretiro1"]);
+
+		//4ta linea
+		$pdf->Text(22,115.5, $datosFinales["el_cargo1"]);
+		$pdf->Text(86,115.5, $datosFinales["el_depen1"]);
+		$pdf->Text(145,115.5, $datosFinales["el_dir1"]);
+
+/*
+*************************INICIO EXPERIENCIA 2
+*/
+		//1ra linea
+	    $pdf->Text(22,131.5, $datosFinales["el_empresa2"]);
+		if ($datosFinales["el_publica2"]) $pdf->Text(119, 131.5, 'X'); else $pdf->Text(138, 131.5, 'X');
+		$pdf->Text(152, 131.5, $datosFinales["el_pais2"]);
+
+		//2da linea
+		$pdf->Text(22,141.5, $datosFinales["el_depto2"]);
+		$pdf->Text(85,141.5, $datosFinales["el_muni2"]);
+		$pdf->Text(147,141.5, $datosFinales["el_correo2"]);
+
+		//3ra linea
+		$pdf->Text(22,151.5, $datosFinales["el_tel2"]);
+		$pdf->Text(93,151.5, $datosFinales["el_dingresa2"]);
+		$pdf->Text(110,151.5, $datosFinales["el_mingresa2"]);
+		$pdf->Text(128,151.5, $datosFinales["el_aingresa2"]);
+		$pdf->Text(151,151.5, $datosFinales["el_dretiro2"]);
+		$pdf->Text(169,151.5, $datosFinales["el_mretiro2"]);
+		$pdf->Text(187,151.5, $datosFinales["el_aretiro2"]);
+
+		//4ta linea
+		$pdf->Text(22,161.5, $datosFinales["el_cargo2"]);
+		$pdf->Text(86,161.5, $datosFinales["el_depen2"]);
+		$pdf->Text(145,161.5, $datosFinales["el_dir2"]);
+
+
+/*
+*************************INICIO EXPERIENCIA 3 
+*/
+		//1ra linea
+	    $pdf->Text(22,177.5, $datosFinales["el_empresa2"]);
+		if ($datosFinales["el_publica2"]) $pdf->Text(119, 177.5, 'X'); else $pdf->Text(138, 177.5, 'X');
+		$pdf->Text(152, 177.5, $datosFinales["el_pais2"]);
+
+		//2da linea
+		$pdf->Text(22,187.5, $datosFinales["el_depto2"]);
+		$pdf->Text(85,187.5, $datosFinales["el_muni2"]);
+		$pdf->Text(147,187.5, $datosFinales["el_correo2"]);
+
+		//3ra linea
+		$pdf->Text(22,197.5, $datosFinales["el_tel2"]);
+		$pdf->Text(93,197.5, $datosFinales["el_dingresa2"]);
+		$pdf->Text(110,197.5, $datosFinales["el_mingresa2"]);
+		$pdf->Text(128,197.5, $datosFinales["el_aingresa2"]);
+		$pdf->Text(151,197.5, $datosFinales["el_dretiro2"]);
+		$pdf->Text(169,197.5, $datosFinales["el_mretiro2"]);
+		$pdf->Text(187,197.5, $datosFinales["el_aretiro2"]);
+
+		//4ta linea
+		$pdf->Text(22,207.5, $datosFinales["el_cargo2"]);
+		$pdf->Text(86,207.5, $datosFinales["el_depen2"]);
+		$pdf->Text(145,207.5, $datosFinales["el_dir2"]);
+
+
+/*
+*************************INICIO EXPERIENCIA 3 
+*/
+		//1ra linea
+	    $pdf->Text(22,223.5, $datosFinales["el_empresa2"]);
+		if ($datosFinales["el_publica2"]) $pdf->Text(119, 223.5, 'X'); else $pdf->Text(138, 223.5, 'X');
+		$pdf->Text(152, 223.5, $datosFinales["el_pais2"]);
+
+		//2da linea
+		$pdf->Text(22,233.5, $datosFinales["el_depto2"]);
+		$pdf->Text(85,233.5, $datosFinales["el_muni2"]);
+		$pdf->Text(147,233.5, $datosFinales["el_correo2"]);
+
+		//3ra linea
+		$pdf->Text(22,243.5, $datosFinales["el_tel2"]);
+		$pdf->Text(93,243.5, $datosFinales["el_dingresa2"]);
+		$pdf->Text(110,243.5, $datosFinales["el_mingresa2"]);
+		$pdf->Text(128,243.5, $datosFinales["el_aingresa2"]);
+		$pdf->Text(151,243.5, $datosFinales["el_dretiro2"]);
+		$pdf->Text(169,243.5, $datosFinales["el_mretiro2"]);
+		$pdf->Text(187,243.5, $datosFinales["el_aretiro2"]);
+
+		//4ta linea
+		$pdf->Text(22,253.5, $datosFinales["el_cargo2"]);
+		$pdf->Text(86,253.5, $datosFinales["el_depen2"]);
+		$pdf->Text(145,253.5, $datosFinales["el_dir2"]);
+	}
+
+private function getThirdPage($pdf, $datosFinales ){
 
 		/*
 		PAGINA 3
@@ -361,12 +449,45 @@ class Pdf
 	    }
 	    $pdf->useTemplate($templateId);
 
-	    foreach ($datosFinales as $key => $value) {
-				$pdf->ln();
-				$pdf->write(10, $key.":  ".$value);		
-		}
-		$pdf->Output();
-	}
+	    if (is_numeric($datosFinales["tte_mserpubli"])){
+	    	$fullMonths = intval($datosFinales["tte_mserpubli"]);
+	    	$yearsPublic = floor($fullMonths / 12);
+	    	$monthsPublic = $yearsPublic * 12;
+	    	$monthsPublic = $fullMonths - $monthsPublic;
+	    	$pdf->Text(136, 69, $yearsPublic == 0 ? "" : $yearsPublic);	    	
+	    	$pdf->Text(162, 69, $monthsPublic == 0 ? "" : $monthsPublic);	    	
+	    }
+
+	    if (is_numeric($datosFinales["tte_mprivado"])){
+	    	$fullMonths = intval($datosFinales["tte_mprivado"]);
+	    	$yearsPriv = floor($fullMonths / 12);
+	    	$monthsPriv = $yearsPriv * 12;
+	    	$monthsPriv = $fullMonths - $monthsPriv;
+	    	$pdf->Text(136, 79, $yearsPriv == 0 ? "" : $yearsPriv);	    	
+	    	$pdf->Text(162, 79, $monthsPriv == 0 ? "" : $monthsPriv);	    	
+	    }
+
+		if (is_numeric($datosFinales["tte_mindep"])){
+	    	$fullMonths = intval($datosFinales["tte_mindep"]);
+	    	$yearsIndep = floor($fullMonths / 12);
+	    	$monthsIndep = $yearsIndep * 12;
+	    	$monthsIndep = $fullMonths - $monthsIndep;
+	    	$pdf->Text(136, 89, $yearsIndep == 0 ? "" : $yearsIndep);	    	
+	    	$pdf->Text(162, 89, $monthsIndep == 0 ? "" : $monthsIndep);	    	
+	    }
+
+	    $allMonths = $monthsPublic + $monthsPriv + $monthsIndep;
+	    $allyears = $yearsPublic + $yearsPriv + $yearsIndep;
+	    $allYearsProces = floor($allMonths / 12);
+	    $allMonthsPorces = $allYearsProces * 12;
+	    $finalMonths = $allMonths - $allMonthsPorces;
+	    $allyears = $allyears + $allYearsProces;
+
+		$pdf->Text(136, 99, $allyears == 0 ? "" : $allyears);	    	
+	    $pdf->Text(162, 99, $finalMonths == 0 ? "" : $finalMonths);	    	
+
+
+}
 
 	private function getQueryString(){
 		return array('dp_pape' => isset($datos->dp_pape) ? $datos->dp_pape : "N/A", 
@@ -438,7 +559,7 @@ class Pdf
 				'fa_idioma2' => isset($datos->fa_idioma2) ? $datos->fa_idioma2 : "N/A", 
 				'fa_habla2' => isset($datos->fa_habla2) ? $datos->fa_habla2 : "N/A", 
 				'fa_lee2' => isset($datos->fa_lee2) ? $datos->fa_lee2 : "N/A", 
-				'fa_escribe2' => isset($datos->fa_escribe2) ? $datos->fa_escribe2 : "N/A", 
+				'fa_escribe2' => isset($datos->fa_escribe2) ? $datos->fa_escribe2 : "N/A",
 				'el_empresa1' => isset($datos->el_empresa1) ? $datos->el_empresa1 : "N/A", 
 				'el_publica1' => isset($datos->el_publica1) ? $datos->el_publica1 : "N/A", 
 				'el_pais1' => isset($datos->el_pais1) ? $datos->el_pais1 : "N/A", 
@@ -503,8 +624,8 @@ class Pdf
 				'el_cargo4' => isset($datos->el_cargo4) ? $datos->el_cargo4 : "N/A", 
 				'el_depen4' => isset($datos->el_depen4) ? $datos->el_depen4 : "N/A", 
 				'el_dir4' => isset($datos->el_dir4) ? $datos->el_dir4 : "N/A", 
-				'tte_mserpubli' => isset($datos->tte_mserpubli) ? $datos->tte_mserpubli : "N/A", 
-				'tte_mprivado' => isset($datos->tte_mprivado) ? $datos->tte_mprivado : "N/A", 
-				'tte_mindep' => isset($datos->tte_mindep) ? $datos->tte_mindep : "N/A");
+				'tte_mserpubli' => isset($datos->tte_mserpubli) ? $datos->tte_mserpubli : "59", 
+				'tte_mprivado' => isset($datos->tte_mprivado) ? $datos->tte_mprivado : "79", 
+				'tte_mindep' => isset($datos->tte_mindep) ? $datos->tte_mindep : "29");
 	}
 }

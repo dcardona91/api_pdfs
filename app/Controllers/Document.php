@@ -12,22 +12,40 @@ class Document{
 
 	public function get($params = null)
 	{
+
+
+		$r = new Response();
 		try {
 			$parameters = json_decode($params);
 			if (isset($parameters->indicators[0])) {
 				$pdf =  new Pdf();
-				$pdf->generate($parameters->indicators[0], $parameters->queryString);
-			}else{
-				throw new Exception("No se definió indicador");				
+				$rpta = $pdf->generate($parameters->indicators[0], $parameters->queryString);
+				if( $rpta == -1){
+					$r->setStatus(404);
+					$r->setMsg("El documento no existe");
+					$r->output("GET");
+				}else{
+					$r->setStatus(200);
+					$r->setMsg("Documento generado correctamente");
+					$r->setResponse(array("document" => "http://192.168.33.10/documents/".$rpta));
+					$r->output("GET");
+				}
+			}else{				
+				$r->setStatus(404);
+				$r->setMsg("No se definió indicador");
+				$r->output("GET");
+				//throw new Exception("No se definió indicador");
 			}			
 		} catch (Exception $e) {
-			die($e->getMessage());
+			// die($e->getMessage());
+			$r->setError($e);			
+			$r->output("GET");
 		}		
 	}
 
 	public function post($params = null)
 	{		
-		//Deliver::json(array("status"=>200), "POST");
+		//Deliver::output(array("status"=>200), "POST");
 	}
 
 	public function put($params = null)

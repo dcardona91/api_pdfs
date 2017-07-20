@@ -11,7 +11,7 @@ class Response
 		$this->_response = $_response;
 	}
 
-	public function setSatus($status){
+	public function setStatus($status){
 		$this->_status = $status;
 	}
 
@@ -69,7 +69,7 @@ class Response
 		return $this->_error;
 	}
 
-	public function json($method){
+	public function output($method){
 		$response = array("response" => $this->_response,
 				"status" => $this->_status,
 				"msg" => $this->_msg,
