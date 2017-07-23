@@ -17,7 +17,7 @@ class Config{
 				'domain' => 'supere.cieroccidente.edu.co'
 				),
 			'site' => array(
-				'name' => 'itm.andres.fm',
+				'name' => 'http://192.168.33.10',
 				'ip' => ''
 				)
 			);
